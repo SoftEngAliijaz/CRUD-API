@@ -30,15 +30,22 @@ async function handleUpdateProductById(req, res) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
 async function handleDeleteProductById(req, res) {
   try {
-    const id = req.params.id;
-    const data = await Product.findByIdAndDelete(id);
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product Not Found" });
+    }
+
     return res
       .status(200)
-      .json({ message: "Product Deleted Successfully", data: data });
+      .json({ message: "Product Deleted", data: deletedProduct });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 }
 
