@@ -8,10 +8,17 @@ const {
   handleDeleteUserById,
 } = require("../controllers/user_controller");
 
-router.post("/createUser", handleAddNewUser);
-router.get("/getAllUsers", handleGetAllUsersData);
-router.get("/getUserById/:id", handleGetUserById);
-router.put("/updateUserById/:id", handleUpdateUserById);
-router.delete("/deleteUserById/:id", handleDeleteUserById);
+// Route for creating a new user and fetching all users
+router
+  .route("/")
+  .post(handleAddNewUser) // Create a user
+  .get(handleGetAllUsersData); // Get all users
+
+// Routes for user operations by ID
+router
+  .route("/:id")
+  .get(handleGetUserById) // Get user by ID
+  .put(handleUpdateUserById) // Update user by ID (full update)
+  .delete(handleDeleteUserById); // Delete user by ID
 
 module.exports = router;

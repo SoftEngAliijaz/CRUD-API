@@ -51,13 +51,19 @@ async function handleAddNewBook(req, res) {
   try {
     const { title, author, publishedDate, genre } = req.body;
 
-    if (!title || !author) {
+    if (!title?.trim() || !author?.trim()) {
       return res
         .status(400)
         .json({ message: "Title and Author are required!" });
     }
 
-    const newBook = new Book({ title, author, publishedDate, genre });
+    const newBook = new Book({
+      title: title.trim(),
+      author: author.trim(),
+      publishedDate: publishedDate || null, // Ensure `publishedDate` is not undefined
+      genre: genre || "Unknown", // Default value if genre is missing
+    });
+
     await newBook.save();
 
     res.status(201).json({
@@ -78,7 +84,13 @@ async function handleUpdateBookById(req, res) {
       return res.status(400).json({ message: "Invalid Book ID!" });
     }
 
-    const updatedBook = await Book.findByIdAndUpdate(bookId, req.body, {
+    const updates = { ...req.body };
+
+    // Trim string values to avoid unnecessary spaces
+    if (updates.title) updates.title = updates.title.trim();
+    if (updates.author) updates.author = updates.author.trim();
+
+    const updatedBook = await Book.findByIdAndUpdate(bookId, updates, {
       new: true,
       runValidators: true,
     });
@@ -113,7 +125,7 @@ async function handleDeleteBookById(req, res) {
 
     res.status(200).json({
       message: "Book Deleted Successfully!",
-      data: `Book with ID: ${bookId} deleted successfully!`,
+      data: deletedBook, // Return the deleted book details instead of a string message
     });
   } catch (error) {
     handleError(res, error);

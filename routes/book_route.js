@@ -8,11 +8,17 @@ const {
   handleDeleteBookById,
 } = require("../controllers/book_controller");
 
-router.route("/").post(handleAddNewBook).get(handleGetAllBooksData);
+// Route for creating a new book and fetching all books
+router
+  .route("/")
+  .post(handleAddNewBook) // Create a book
+  .get(handleGetAllBooksData); // Get all books
+
+// Routes for book operations by ID
 router
   .route("/:id")
-  .get(handleGetBookById)
-  .put(handleUpdateBookById)
-  .delete(handleDeleteBookById);
+  .get(handleGetBookById) // Get book by ID
+  .put(handleUpdateBookById) // Update book by ID (full update)
+  .delete(handleDeleteBookById); // Delete book by ID
 
 module.exports = router;
