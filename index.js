@@ -22,6 +22,10 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/employees", employeeRouter);
 
+app.get("/", (req, res) => {
+  res.send("App is Running on Render Successfully!");
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
