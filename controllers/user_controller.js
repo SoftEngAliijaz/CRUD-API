@@ -1,17 +1,15 @@
 const User = require("../models/user_model");
 const mongoose = require("mongoose");
 
-// Utility function for error handling
 const handleError = (res, error, statusCode = 500) => {
   console.error(error);
   return res.status(statusCode).json({ message: error.message });
 };
 
-// Get all users
 async function handleGetAllUsersData(req, res) {
   try {
     const users = await User.find({});
-    if (!users.length) {
+    if (!users.length || !users || users.length === 0) {
       return res.status(404).json({ message: "No users data found" });
     }
     return res.status(200).json({
@@ -23,7 +21,6 @@ async function handleGetAllUsersData(req, res) {
   }
 }
 
-// Get a user by ID
 async function handleGetUserById(req, res) {
   try {
     const { id } = req.params;
@@ -45,7 +42,6 @@ async function handleGetUserById(req, res) {
   }
 }
 
-// Add a new user
 async function handleAddNewUser(req, res) {
   try {
     const { name, email, password } = req.body;
@@ -72,7 +68,6 @@ async function handleAddNewUser(req, res) {
   }
 }
 
-// Update a user by ID
 async function handleUpdateUserById(req, res) {
   try {
     const { id } = req.params;
@@ -104,7 +99,6 @@ async function handleUpdateUserById(req, res) {
   }
 }
 
-// Delete a user by ID
 async function handleDeleteUserById(req, res) {
   try {
     const { id } = req.params;

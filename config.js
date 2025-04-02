@@ -9,7 +9,7 @@ async function configureDatabase(databaseUrl) {
     console.log("✅ Database Connected Successfully!");
   } catch (error) {
     console.error("❌ Database Connection Error:", error.message);
-    process.exit(1); // Exit process with failure
+    process.exit(1);
   }
 }
 
