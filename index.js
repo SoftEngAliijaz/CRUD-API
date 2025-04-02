@@ -15,6 +15,7 @@ configureDatabase(DATABASE_URL);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("json spaces", 2);
 app.use(morgan("dev"));
 
 app.use("/api/books", bookRouter);
