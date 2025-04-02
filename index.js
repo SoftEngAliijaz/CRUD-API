@@ -8,7 +8,7 @@ const productRouter = require("./routes/product_route");
 const employeeRouter = require("./routes/employee_route");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 9000;
 const DATABASE_URL = process.env.DATABASE_URL;
 
 configureDatabase(DATABASE_URL);
@@ -24,9 +24,9 @@ app.use("/api/products", productRouter);
 app.use("/api/employees", employeeRouter);
 
 app.get("/", (req, res) => {
-  res.send("App is Running on Render Successfully!");
+  res.send("✅ API is running on Render!");
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
