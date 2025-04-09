@@ -1,4 +1,4 @@
-const User = require("../models/user_model");
+const UserModel = require("../models/user_model");
 const mongoose = require("mongoose");
 
 const handleError = (res, error, statusCode = 500) => {
