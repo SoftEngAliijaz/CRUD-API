@@ -8,7 +8,7 @@ const handleError = (res, error, statusCode = 500) => {
 
 async function handleGetAllUsersData(req, res) {
   try {
-    const users = await User.find({});
+    const users = await UserModel.find({});
     if (!users.length || !users || users.length === 0) {
       return res.status(404).json({ message: "No users data found" });
     }
@@ -29,7 +29,7 @@ async function handleGetUserById(req, res) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const user = await User.findById(id);
+    const user = await UserModel.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -103,19 +103,23 @@ async function handleUpdateUserById(req, res) {
   try {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (isNaN(id)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
     const updates = { ...req.body };
 
-    if (updates.name) updates.name = updates.name.trim();
-    if (updates.email) updates.email = updates.email.trim();
+    if (updates.first_name) updates.first_name = updates.first_name.trim();
+    if (updates.last_name) updates.last_name = updates.last_name.trim();
 
-    const updatedUser = await User.findByIdAndUpdate(id, updates, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { user_id: id },
+      updates,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -134,11 +138,11 @@ async function handleDeleteUserById(req, res) {
   try {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (isNaN(id)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const deletedUser = await User.findByIdAndDelete(id);
+    const deletedUser = await UserModel.findOneAndDelete({ user_id: id });
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
