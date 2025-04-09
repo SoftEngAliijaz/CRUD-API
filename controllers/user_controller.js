@@ -1,4 +1,4 @@
-const UserModel = require("../models/user_model");
+const User = require("../models/user_model");
 const mongoose = require("mongoose");
 
 const handleError = (res, error, statusCode = 500) => {
@@ -8,7 +8,7 @@ const handleError = (res, error, statusCode = 500) => {
 
 async function handleGetAllUsersData(req, res) {
   try {
-    const users = await UserModel.find({});
+    const users = await User.find({});
     if (!users.length || !users || users.length === 0) {
       return res.status(404).json({ message: "No users data found" });
     }
@@ -29,7 +29,7 @@ async function handleGetUserById(req, res) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const user = await UserModel.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -72,10 +72,10 @@ async function handleAddNewUser(req, res) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const latestUser = await UserModel.findOne().sort({ user_id: -1 });
+    const latestUser = await User.findOne().sort({ user_id: -1 });
     const newUserId = latestUser ? latestUser.user_id + 1 : 1;
 
-    const newUser = new UserModel({
+    const newUser = new User({
       user_id: newUserId,
       first_name: first_name.trim(),
       last_name: last_name.trim(),
@@ -112,14 +112,10 @@ async function handleUpdateUserById(req, res) {
     if (updates.first_name) updates.first_name = updates.first_name.trim();
     if (updates.last_name) updates.last_name = updates.last_name.trim();
 
-    const updatedUser = await UserModel.findOneAndUpdate(
-      { user_id: id },
-      updates,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const updatedUser = await User.findOneAndUpdate({ user_id: id }, updates, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -142,7 +138,7 @@ async function handleDeleteUserById(req, res) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const deletedUser = await UserModel.findOneAndDelete({ user_id: id });
+    const deletedUser = await User.findOneAndDelete({ user_id: id });
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
