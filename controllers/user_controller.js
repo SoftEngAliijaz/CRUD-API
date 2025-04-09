@@ -44,18 +44,49 @@ async function handleGetUserById(req, res) {
 
 async function handleAddNewUser(req, res) {
   try {
-    const { name, email, password } = req.body;
+    const {
+      first_name,
+      last_name,
+      age,
+      email,
+      password,
+      phone_number,
+      address,
+      city,
+      country,
+      gender,
+    } = req.body;
 
-    if (!name?.trim() || !email?.trim() || !password?.trim()) {
-      return res
-        .status(400)
-        .json({ message: "Name, email, and password are required" });
+    if (
+      !first_name?.trim() ||
+      !last_name?.trim() ||
+      !age ||
+      !email?.trim() ||
+      !password?.trim() ||
+      !phone_number?.trim() ||
+      !address?.trim() ||
+      !city?.trim() ||
+      !country?.trim() ||
+      !gender?.trim()
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    const newUser = new User({
-      name: name.trim(),
+    const latestUser = await UserModel.findOne().sort({ user_id: -1 });
+    const newUserId = latestUser ? latestUser.user_id + 1 : 1;
+
+    const newUser = new UserModel({
+      user_id: newUserId,
+      first_name: first_name.trim(),
+      last_name: last_name.trim(),
       email: email.trim(),
       password: password.trim(),
+      phone_number: phone_number.trim(),
+      address: address.trim(),
+      city: city.trim(),
+      country: country.trim(),
+      gender: gender.trim(),
+      age: age,
     });
 
     const savedUser = await newUser.save();
