@@ -49,7 +49,6 @@ async function handleAddNewUser(req, res) {
       last_name,
       age,
       email,
-      password,
       phone_number,
       address,
       city,
@@ -62,7 +61,6 @@ async function handleAddNewUser(req, res) {
       !last_name?.trim() ||
       !age ||
       !email?.trim() ||
-      !password?.trim() ||
       !phone_number?.trim() ||
       !address?.trim() ||
       !city?.trim() ||
@@ -80,7 +78,6 @@ async function handleAddNewUser(req, res) {
       first_name: first_name.trim(),
       last_name: last_name.trim(),
       email: email.trim(),
-      password: password.trim(),
       phone_number: phone_number.trim(),
       address: address.trim(),
       city: city.trim(),
